@@ -29,10 +29,19 @@ export class ListService{
     }
     
     async update(list: List): Promise<List> {
+        let searchID: List = await this.findById(list.id);
+
+        if (!searchID || !list.id)
+            throw new HttpException('ID not found!', HttpStatus.NOT_FOUND);
+
             return await this.listRepository.save(list);
     
         }
         async delete(id: number): Promise<DeleteResult> {
+            let searchID = await this.findById(id);
+
+            if(!searchID)
+                throw new HttpException('ID not found!', HttpStatus.NOT_FOUND);
             return await this.listRepository.delete(id);
         }
     }
